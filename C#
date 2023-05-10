@@ -1,0 +1,123 @@
+using System;
+using System.Collections.Generic;
+
+class InventoryManagementApp
+{
+    static List<Product> inventory = new List<Product>();
+
+    static void Main(string[] args)
+    {
+        while (true)
+        {
+            Console.WriteLine("===== Aplicativo de Gerenciamento de Estoque =====");
+            Console.WriteLine("1. Adicionar produto");
+            Console.WriteLine("2. Registrar venda");
+            Console.WriteLine("3. Exibir relatório de estoque");
+            Console.WriteLine("4. Sair");
+
+            Console.Write("Selecione uma opção: ");
+            string option = Console.ReadLine();
+
+            Console.WriteLine();
+
+            switch (option)
+            {
+                case "1":
+                    AddProduct();
+                    break;
+                case "2":
+                    SellProduct();
+                    break;
+                case "3":
+                    DisplayInventoryReport();
+                    break;
+                case "4":
+                    Environment.Exit(0);
+                    break;
+                default:
+                    Console.WriteLine("Opção inválida. Por favor, selecione uma opção válida.");
+                    break;
+            }
+
+            Console.WriteLine();
+        }
+    }
+
+    static void AddProduct()
+    {
+        Console.WriteLine("===== Adicionar Produto =====");
+        Console.Write("Nome do produto: ");
+        string name = Console.ReadLine();
+        Console.Write("Quantidade: ");
+        int quantity = int.Parse(Console.ReadLine());
+
+        Product product = new Product(name, quantity);
+        inventory.Add(product);
+
+        Console.WriteLine("Produto adicionado com sucesso!");
+    }
+
+    static void SellProduct()
+    {
+        Console.WriteLine("===== Registrar Venda =====");
+        Console.Write("Nome do produto: ");
+        string name = Console.ReadLine();
+        Console.Write("Quantidade: ");
+        int quantity = int.Parse(Console.ReadLine());
+
+        bool productFound = false;
+
+        foreach (Product product in inventory)
+        {
+            if (product.Name == name)
+            {
+                if (product.Quantity >= quantity)
+                {
+                    product.Quantity -= quantity;
+                    Console.WriteLine("Venda registrada com sucesso!");
+                }
+                else
+                {
+                    Console.WriteLine("Quantidade insuficiente em estoque!");
+                }
+
+                productFound = true;
+                break;
+            }
+        }
+
+        if (!productFound)
+        {
+            Console.WriteLine("Produto não encontrado em estoque!");
+        }
+    }
+
+    static void DisplayInventoryReport()
+    {
+        Console.WriteLine("===== Relatório de Estoque =====");
+
+        if (inventory.Count == 0)
+        {
+            Console.WriteLine("Nenhum produto em estoque.");
+        }
+        else
+        {
+            foreach (Product product in inventory)
+            {
+                Console.WriteLine($"Nome: {product.Name} - Quantidade: {product.Quantity}");
+            }
+        }
+    }
+}
+
+class Product
+{
+    public string Name { get; set; }
+    public int Quantity { get; set; }
+
+    public Product(string name, int quantity)
+    {
+        Name = name;
+        Quantity = quantity;
+    }
+}
